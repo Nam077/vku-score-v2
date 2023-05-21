@@ -94,6 +94,8 @@ export const recommend = (hocphan: IScore[]) => {
                 sum_difference += (sumScoreCh / countSubject - score[subject.scoreCh || '']) / Math.pow(2, j);
             }
 
+            sum_difference += subject.scoreCh == 'F' ? 10 : 0;
+
             recommendHocPhan.push({
                 id: subject.id,
                 name: subject.name || '',
