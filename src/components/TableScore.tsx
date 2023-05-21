@@ -1,13 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { IScore } from '../pages/score/Score.tsx';
 import { ColumnsType } from 'antd/es/table';
-import { Button, Col, Select, Table, Tag, Typography } from 'antd';
+import { Button, Col, Select, Table, Tag } from 'antd';
 
 interface OwnProps {
     scores: IScore[];
     scoreModified: IScore[];
     changeModified: (score: IScore) => void;
 }
+
 interface ColorType {
     [key: string]: string;
 }
@@ -131,11 +132,11 @@ const TableScore: FunctionComponent<Props> = (props) => {
                             flexDirection: 'column',
                             minWidth: '165px',
                             maxWidth: '165px',
-                            minHeight: '50px',
+                            minHeight: '59px',
                         }}
                     >
                         <Select
-                            defaultValue={props.scoreModified[index].scoreCh}
+                            value={props.scoreModified[index].scoreCh}
                             style={{ fontWeight: 'bold' }}
                             disabled={scoreCh === 'A'}
                             options={getAllHighScoreThanCurrent(scoreCh)}
@@ -145,7 +146,7 @@ const TableScore: FunctionComponent<Props> = (props) => {
                             }}
                         />
                         {isChanged && (
-                            <Tag color={colorType[scoreCh]} style={{ marginTop: '5px', width: '100%' }}>
+                            <Tag color={colorType['A']} style={{ marginTop: '5px', width: '100%' }}>
                                 {scoreCh === '' ? 'Chưa có điểm.' : `Điểm trước khi cải thiện ${scoreCh}.`}
                             </Tag>
                         )}
@@ -154,7 +155,7 @@ const TableScore: FunctionComponent<Props> = (props) => {
             },
         },
     ];
-    const [isShowExtraColumn, setIsShowExtraColumn] = React.useState(false);
+    const [isShowExtraColumn, setIsShowExtraColumn] = React.useState(true);
     const toggleExtraColumn = () => {
         setIsShowExtraColumn(!isShowExtraColumn);
     };

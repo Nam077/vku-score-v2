@@ -66,6 +66,7 @@ export const recommend = (hocphan: IScore[]) => {
     console.log(tags);
 
     const recommendHocPhan: {
+        id: number;
         name: string;
         sumScoreCh: any;
         countTch: any;
@@ -94,6 +95,7 @@ export const recommend = (hocphan: IScore[]) => {
             }
 
             recommendHocPhan.push({
+                id: subject.id,
                 name: subject.name || '',
                 sumScoreCh: subject.scoreCh,
                 countTch: subject.countTC,

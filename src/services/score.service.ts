@@ -24,7 +24,6 @@ export class ScoreService {
 
     public setScore(scores: IScore[]) {
         this.scores = [...scores]; // Gán scores vào một mảng mới
-        console.log(this.scores);
         this.calcScoreCount();
     }
 
