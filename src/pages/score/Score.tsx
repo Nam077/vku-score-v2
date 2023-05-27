@@ -7,15 +7,12 @@ import { ScoreService } from '../../services/score.service.ts';
 import GPAView from '../../components/GPAView.tsx';
 import { useNotification } from '../../contexts/Notification.tsx';
 import FloatingButton from '../../components/FloatingButton.tsx';
-import { Button, Collapse, FloatButton, Modal, Skeleton, Typography } from 'antd';
+import { Button, FloatButton, Modal, Skeleton } from 'antd';
 import TableRecommend from '../../components/TableRecommend.tsx';
 import { recommend } from '../../services/recomend.service.ts';
-import CodeDisplay from '../../components/CodeDisplay.tsx';
-import data from '../../datas/data.json';
 import { PlusOutlined } from '@ant-design/icons';
 import AddScore from '../../components/AddScore.tsx';
-
-const { Panel } = Collapse;
+import Tutorial from '../../components/Tutorial.tsx';
 
 export interface IScore {
     value: string;
@@ -223,16 +220,7 @@ const Score: FunctionComponent = () => {
                         </div>
                     ) : (
                         <div style={{ marginTop: '10px' }}>
-                            <Collapse accordion>
-                                <Panel header="Code lấy dữ liệu học phần" style={{ fontWeight: 'bold' }} key="1">
-                                    <Typography.Text type="danger">
-                                        Chúng tôi cam kết 100% không thu thập dữ liệu người dùng. Đoạn code này mục đích
-                                        chỉ lấy thông tin điểm của người dùng ở phía frontend và không can thiệp vào hệ
-                                        thống của trường.
-                                    </Typography.Text>
-                                    <CodeDisplay content={data.code2} language={'javascript'} />
-                                </Panel>
-                            </Collapse>
+                            <Tutorial />
                         </div>
                     )}
                 </>
