@@ -52,7 +52,7 @@ Mô hình linear regression có thể tìm ra một mối quan hệ tuyến tín
 #### 2.1.1. Đăng nhập vào hệ thống đào tạo của sinh viên VKU
 Truy cập vào trang [đăng nhập](https://daotao.vku.udn.vn/sv) của VKU. Người dùng cần có tài khoản của sinh viên trường VKU để thực hiện bước này.
 <div align="center">
-    <img src="https://i.ibb.co/hmghpT6/image.png" alt="image" border="0">
+   <img src="https://i.ibb.co/RgvZjzh/image.png" alt="image" border="0">
 </div>
 
 #### 2.1.2. Truy cập vào trang điểm của sinh viên VKU
