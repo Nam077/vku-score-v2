@@ -2,13 +2,16 @@
 
 ### Bước 1:
 Truy cập vào trang [đăng nhập](https://daotao.vku.udn.vn/sv) của VKU
-
-<img src="https://i.ibb.co/hmghpT6/image.png" alt="image" border="0">
+<div align="center">
+    <img src="https://i.ibb.co/hmghpT6/image.png" alt="image" border="0">
+</div>
 
 ### Bước 2:
 Sau khi đăng nhập thành công, truy cập vào trang [điểm](https://daotao.vku.udn.vn/sv/diem) của VKU
 
+<div align="center">
 <img src="https://i.ibb.co/CzBqD45/image.png" alt="image" border="0">
+</div>
 
 ### Bước 3:
 
@@ -24,13 +27,18 @@ Các cách mở `Developer Tools`:
 
 Sau khi mở `Developer Tools` thành công, chọn tab `Console` để tiến hành thực hiện các bước tiếp theo
 
+<div align="center">
 <img src="https://i.ibb.co/QCzyV7y/image.png" alt="image" border="0">
+</div>
 
 ### Bước 4: Tải xuống file điểm
 
-Copy đoạn mã sau và dán vào `Console` rồi nhấn `Enter` để thực hiện
-
 <i  class="text-danger" > Chúng tôi cam kết 100% không thu thập dữ liệu người dùng. Đoạn code này mục đích chỉ lấy thông tin điểm của người dùng ở phía frontend và không can thiệp vào hệ thống của trường. </i>
+
+Đầu tiên bạn cần sao chép đoạn mã phía dưới.
+<details>
+<summary> 🔴 Hiện thị mã tại đây 🔽 </summary>
+<p>
 
 ```javascript
 function decodeHtmlEntities(text) {
@@ -127,19 +135,29 @@ link.click();
 URL.revokeObjectURL(url);
 link.remove();
 ```
-<img src="https://i.ibb.co/j9tcg4b/image.png" alt="image" border="0">
+</p>
+</details>
 
-Sau khi thực hiện xong, file điểm sẽ được tải xuống máy tính của bạn với tên là `diem.json`
+Dán đoạn mã vừa sao chép vào `Console` rồi nhấn `Enter`
+<div align="center">
+<img src="https://i.ibb.co/j9tcg4b/image.png" alt="image" border="0">
+</div>
+
+Ngay lập tức, file điểm sẽ được tải xuống máy tính của bạn với tên là `diem.json`
 ### Bước 5: Tải dữ liệu điểm lên hệ thống
 
 Trở lại trang chủ của [VKU SCORE](https://nam077.github.io/vku-score-v2)      
 Bấm vào nút `Chọn file` và chọn file `diem.json` vừa tải xuống ở bước trên hoăc kéo thả file `diem.json` vào ô chọn file
 
+<div align="center">
 <img src="https://i.ibb.co/3mYVvnn/image.png" alt="image" border="0">
+</div>
 
 Sau khi xong dữ liệu điểm sẽ được hiển thị trên trang web.
 
+<div align="center">
 <img src="https://i.ibb.co/m9f2XQB/image.png" alt="image" border="0">
+</div>
 
 # Cách sử dụng VKU SCORE
 
@@ -148,28 +166,38 @@ Sau khi xong dữ liệu điểm sẽ được hiển thị trên trang web.
 Ở giao diện chính của [VKU SCORE](https://nam077.github.io/vku-score-v2), bạn có thể xem điểm sau khi cải thiện bằng cách
 đổi các điểm ở mỗi hàng ở cột `Thay đổi` 
 
+<div align="center">
 <img src="https://i.ibb.co/YBPvycv/image.png" alt="image" border="0">
+</div>
 
 Sau khi thay đổi giá trị thì hệ thống sẽ tự động tính toán điểm của bạn và hiển thị `GPA Mới`
 
-<img src="https://i.ibb.co/4p5L0y8/image.png" alt="image" border="0">       
+<div align="center">
+<img src="https://i.ibb.co/4p5L0y8/image.png" alt="image" border="0">
+</div>       
 
 ## Gợi ý đánh giá học phần
 
 Ở giao diện chính của [VKU SCORE](https://nam077.github.io/vku-score-v2) bạn có thể xem gợi ý đánh giá học phần bằng cách nhấn vào nút `Gợi ý cải thiện học phần` 
 ở góc dưới bên phải của trang web.
  
+<div align="center">
 <img src="https://i.ibb.co/qkr8nXD/image.png" alt="image" border="0">
+</div>
 
 Công cụ này sẽ dựa trên dữ liệu điểm của bạn sau đó tự động tính toán các thế mạnh của bạn và đưa ra gợi ý đánh giá học phần. 
 
 Sau khi đã tính toán xong một `Popup` sẽ hiện ra. Với một bảng là dữ liệu các học phần gợi ý cải thiện. Được hiển thị theo độ ưu tiên từ trên xuống dưới.
 
+<div align="center">
 <img src="https://i.ibb.co/0tgFhf2/image.png" alt="image" border="0">
+</div>
 
 Bạn cũng có thể thay đổi các giá trị điểm của các học phần ở cột `Thay đổi` để xem điểm của bạn sẽ thay đổi như thế nào khi bạn cải thiện điểm của các học phần đó.
 
+<div align="center">
 <img src="https://i.ibb.co/GJVzFNd/image.png" alt="image" border="0">
+</div>
 
 # Tiện ích bổ sung cho VKU SCORE
 
@@ -189,8 +217,4 @@ Mở file <a href=https://github.com/Nam077/VKU_ToolAuto_Danh_Gia_Hoc_Phan/blob/
 ### Đánh giá sự cần thiết của học phần
 Mở file <a href=https://github.com/Nam077/VKU_ToolAuto_Danh_Gia_Hoc_Phan/blob/master/toolDanhGiaSuCanThiet.js>`toolDanhGiaSuCanThiet.js`</a>sau đó copy nội dung. Quay trở lại trình duyệt ở DevTool bấm vào mục Console sau đó dán nội dụng vào. Tiến hành nhấn nút `Enter` để tool tiến hành quét các học phần, sau đó  sẽ tự động đánh giá các học phần chưa đánh giá.
 
- => Lưu ý mọi người không được spam quá nhiều lần tránh việc web trường quá tải, xin cảm ơn
-
-
-
-                                
+ > :warning: Lưu ý mọi người không được spam quá nhiều lần tránh việc web trường quá tải, xin cảm ơn
