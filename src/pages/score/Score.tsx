@@ -219,7 +219,7 @@ const Score: FunctionComponent = () => {
                             </Modal>
                         </div>
                     ) : (
-                        <div style={{ marginTop: '10px' }}>
+                        <div style={{ marginTop: '40px' }}>
                             <Tutorial />
                         </div>
                     )}

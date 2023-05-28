@@ -212,7 +212,7 @@ Sau khi xong dữ liệu điểm sẽ được hiển thị trên trang web.
 <img src="https://i.ibb.co/m9f2XQB/image.png" alt="image" border="0">
 </div>
 
-#### 2.2.1. Tính điểm GPA
+#### 2.2.2. Tính điểm GPA
 Sau khi bằm vào trang web, và chọn file `diem.json` vừa tải xuống ở bước trên hođc kéo thả file `diem.json` vào ô chọn file, điểm GPA của bạn lập tức được tính ở phần GPA cũ.
 <div align="center">
 <img src="https://i.ibb.co/m9f2XQB/image.png" alt="image" border="0">
@@ -222,7 +222,7 @@ Sau khi bằm vào trang web, và chọn file `diem.json` vừa tải xuống �
 
 Bạn cũng có thể thêm những học phần chưa vào điểm, hoặc những học phần của học kì tiếp theo vào, VKU Score sẽ tính điểm GPA cho bạn.
 
-#### 2.2.2. Xem điểm sau khi cải thiện
+#### 2.2.3. Xem điểm sau khi cải thiện
 
 Ở giao diện chính của [VKU SCORE](https://nam077.github.io/vku-score-v2), người dùng có thể xem điểm sau khi cải thiện bằng cách
 đổi các điểm ở mỗi hàng ở cột `Thay đổi` 
@@ -237,7 +237,7 @@ Sau khi thay đổi giá trị thì hệ thống sẽ tự động tính toán �
 <img src="https://i.ibb.co/4p5L0y8/image.png" alt="image" border="0">
 </div>       
 
-#### 2.2.3. Gợi ý đánh giá học phần
+#### 2.2.4. Gợi ý đánh giá học phần
 
 Ở giao diện chính của [VKU SCORE](https://nam077.github.io/vku-score-v2) người dùng có thể xem gợi ý đánh giá học phần bằng cách nhấn vào nút `Gợi ý cải thiện học phần` 
 ở góc dưới bên phải của trang web.

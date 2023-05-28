@@ -5,10 +5,13 @@ const Tutorial: FunctionComponent = () => {
     return (
         <div>
             <MarkdownPreview
+                style={{
+                    padding: '0px 100px',
+                }}
                 warpperElement={{
                     'data-color-mode': 'light',
                 }}
-                source={data.readme}
+                source={data.readme2}
             />
         </div>
     );
