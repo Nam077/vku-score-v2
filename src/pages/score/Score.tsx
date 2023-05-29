@@ -152,6 +152,15 @@ const Score: FunctionComponent = () => {
         setScoreData([...scoreData.slice(0, index), ...scoreData.slice(index + 1)]);
     };
 
+    const deleteScore = (id: number) => {
+        const index = scoreData.findIndex((s) => s.id === id);
+        if (index === -1) {
+            return;
+        }
+        setScoreData([...scoreData.slice(0, index), ...scoreData.slice(index + 1)]);
+        setScoreModified([...scoreModified.slice(0, index), ...scoreModified.slice(index + 1)]);
+    };
+
     const updateScoreModified = (score: IScore) => {
         setScoreModified(
             scoreModified.map((s) => {
@@ -183,6 +192,7 @@ const Score: FunctionComponent = () => {
                         <div style={{ marginTop: '20px' }}>
                             <GPAView GPA={currentGPA} GPAChange={newGPA} />
                             <TableScore
+                                deleteScore={deleteScore}
                                 scores={scoreData}
                                 changeModified={updateScoreModified}
                                 scoreModified={scoreModified}
@@ -212,6 +222,7 @@ const Score: FunctionComponent = () => {
                                 title={'Thêm học phần'}
                                 open={isModalAdd}
                                 onOk={handleOkAdd}
+                                okButtonProps={{ disabled: true }}
                                 onCancel={handleCancelAdd}
                                 width={800}
                             >

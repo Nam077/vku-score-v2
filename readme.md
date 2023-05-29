@@ -84,7 +84,7 @@ Sau khi đăng nhập thành công, truy cập vào trang [điểm](https://daot
 
 <i  class="text-danger" > Chúng tôi cam kết 100% không thu thập dữ liệu người dùng. Đoạn code này mục đích chỉ lấy thông tin điểm của người dùng ở phía frontend và không can thiệp vào hệ thống của trường. </i>
 
-người dùng cần sao chép đoạn mã phía dưới để làm bước tiếp theo.
+Người dùng cần sao chép đoạn mã phía dưới để làm bước tiếp theo.
 <details>
 <summary> 🔴 Hiện thị mã tại đây 🔽 </summary>
 <p>
@@ -218,7 +218,7 @@ Truy cập trang chủ của [VKU SCORE](https://nam077.github.io/vku-score-v2)
 ```
 https://nam077.github.io/vku-score-v2   
 ```
-Bấm vào nút `Chọn file` và chọn file `diem.json` vừa tải xuống ở bước trên hoăc kéo thả file `diem.json` vào ô chọn file
+Bấm vào nút `Chọn file` và chọn file `diem.json` vừa tải xuống ở bước trên hoặc kéo thả file `diem.json` vào ô chọn file
 
 <div align="center">
 <img src="https://i.ibb.co/3mYVvnn/image.png" alt="image" border="0">
