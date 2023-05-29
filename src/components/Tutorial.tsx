@@ -5,9 +5,6 @@ const Tutorial: FunctionComponent = () => {
     return (
         <div>
             <MarkdownPreview
-                style={{
-                    padding: '0px 100px',
-                }}
                 warpperElement={{
                     'data-color-mode': 'light',
                 }}
