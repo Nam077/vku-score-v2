@@ -11,6 +11,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@google-cloud/local-auth": "^2.1.1",
     "@uiw/react-markdown-preview": "^4.1.13",
     "antd": "^5.5.0",
     "gh-pages": "^5.0.0",

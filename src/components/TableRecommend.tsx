@@ -1,8 +1,9 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { colorType, getAllHighScoreThanCurrent } from './TableScore.tsx';
-import { Col, Select, Skeleton, Table, Tag, Typography } from 'antd';
+import { Col, Select, Skeleton, Table, Tabs, Tag, Typography } from 'antd';
 import { IScore } from '../pages/score/Score.tsx';
 import { ColumnsType } from 'antd/es/table';
+import { RecommendHocPhan } from '../services/recomend.service.ts';
 
 export interface Recommend {
     id: number;
@@ -17,12 +18,13 @@ export interface Recommend {
 
 interface OwnProps {
     recommends: Recommend[];
+    recommendHocPhan: RecommendHocPhan[];
     scoreModified: IScore[];
     changeModified: (score: IScore) => void;
 }
 
 type Props = OwnProps;
-const getElmentById = (id: number, recommends: IScore[]) => {
+const getElementById = (id: number, recommends: IScore[]) => {
     return recommends.find((recommend) => recommend.id === id);
 };
 const TableRecommend: FunctionComponent<Props> = (props) => {
@@ -76,7 +78,7 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
             key: 'action',
             dataIndex: 'sumScoreCh',
             render: (sumScoreCh, record) => {
-                const score = getElmentById(record.id, props.scoreModified) as IScore;
+                const score = getElementById(record.id, props.scoreModified) as IScore;
                 const isChanged = score?.scoreCh !== sumScoreCh;
                 return (
                     <div
@@ -109,6 +111,93 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
             },
         },
     ];
+    // interface RecommendHocPhan {
+    //     id: number;
+    //     name: string;
+    //     scorePredict: number;
+    //     scoreT10: number | string | null;
+    //     difference: number;
+    //     scoreCh: number | string | null;
+    //     countTC: number | string | null;
+    // }
+    const columns2: ColumnsType<RecommendHocPhan> = [
+        {
+            title: 'STT',
+            key: 'stt',
+            dataIndex: 'id',
+        },
+        {
+            title: 'Học phần',
+            key: 'name',
+            dataIndex: 'name',
+        },
+        {
+            title: 'Số tín chỉ',
+            key: 'countTC',
+            dataIndex: 'countTC',
+        },
+        {
+            title: 'Điểm hiện tại',
+            key: 'scoreT10',
+            dataIndex: 'scoreT10',
+            render: (scoreT10, record) => (
+                <Col flex={1} style={{ textAlign: 'center' }}>
+                    <Tag
+                        color={scoreT10 > record.scorePredict ? colorType['A'] : colorType['F']}
+                        style={{ marginTop: '5px', textAlign: 'center', fontStyle: 'bold' }}
+                    >
+                        {scoreT10}
+                    </Tag>
+                </Col>
+            ),
+        },
+        {
+            title: 'Điểm dự đoán',
+            key: 'scorePredict',
+            dataIndex: 'scorePredict',
+            render: (scorePredict) => (
+                <Col flex={1} style={{ textAlign: 'center' }}>
+                    <Tag
+                        color={scorePredict > 5 ? colorType['A'] : colorType['F']}
+                        style={{ marginTop: '5px', textAlign: 'center', fontStyle: 'bold' }}
+                    >
+                        {scorePredict.toFixed(3)}
+                    </Tag>
+                </Col>
+            ),
+        },
+        // độ chênh lệch
+        {
+            title: 'Độ chênh lệch',
+            key: 'difference',
+            dataIndex: 'difference',
+            render: (difference) => (
+                <Col flex={1} style={{ textAlign: 'center' }}>
+                    <Tag
+                        color={difference > 0 ? colorType['A'] : colorType['F']}
+                        style={{ marginTop: '5px', textAlign: 'center', fontStyle: 'bold' }}
+                    >
+                        {difference.toFixed(3)}
+                    </Tag>
+                </Col>
+            ),
+        },
+        {
+            title: 'Điểm Chữ',
+            key: 'scoreCh',
+            dataIndex: 'scoreCh',
+            render: (scoreCh) => (
+                <Col flex={1} style={{ textAlign: 'center' }}>
+                    <Tag
+                        color={colorType[scoreCh]}
+                        style={{ marginTop: '5px', textAlign: 'center', fontStyle: 'bold' }}
+                    >
+                        {scoreCh}
+                    </Tag>
+                </Col>
+            ),
+        },
+    ];
     return (
         <div>
             {isLoading ? (
@@ -119,19 +208,45 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
                         Chúng tôi đã phân tích thế mạnh của bạn. Bạn nên ưu tiên học cải thiện những môn dưới đây, theo
                         thứ tự ưu tiên trừ trên xuống.
                     </Typography.Text>
-                    <Table
-                        columns={columns}
-                        dataSource={filteredRecommendsWithKey}
-                        pagination={false}
-                        style={{
-                            fontWeight: 'bold',
-                            marginTop: '10px',
-                        }}
-                    />
+                    <Tabs
+                        defaultActiveKey="1"
+                        centered
+                        items={[
+                            {
+                                key: '1',
+                                label: 'Gợi ý học phần theo thế mạnh',
+                                children: (
+                                    <Table
+                                        columns={columns}
+                                        dataSource={filteredRecommendsWithKey}
+                                        pagination={false}
+                                        style={{
+                                            fontWeight: 'bold',
+                                            marginTop: '10px',
+                                        }}
+                                    />
+                                ),
+                            },
+                            {
+                                key: '2',
+                                label: 'Gợi ý dựa theo mặt bằng chung VKU',
+                                children: (
+                                    <Table
+                                        columns={columns2}
+                                        dataSource={props.recommendHocPhan}
+                                        pagination={false}
+                                        style={{
+                                            fontWeight: 'bold',
+                                            marginTop: '10px',
+                                        }}
+                                    />
+                                ),
+                            },
+                        ]}
+                    ></Tabs>
                 </div>
             )}
         </div>
     );
 };
-
 export default TableRecommend;

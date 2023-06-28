@@ -1,6 +1,7 @@
-import subjects from '../datas/subject.json';
+import subjects from '../datas/subjects.json';
 import { removeAscent } from './string.service.ts';
 import { IScore } from '../pages/score/Score.tsx';
+import { linearData } from './linear.ts';
 
 interface Subject {
     name: string;
@@ -63,8 +64,6 @@ export const recommend = (hocphan: IScore[]) => {
         }
     }
 
-    console.log(tags);
-
     const recommendHocPhan: {
         id: number;
         name: string;
@@ -111,6 +110,80 @@ export const recommend = (hocphan: IScore[]) => {
     recommendHocPhan.sort((a, b) => {
         return b.difference - a.difference;
     });
+    return recommendHocPhan;
+};
 
+interface ResultItem {
+    id: number;
+    name: string;
+    scorePredict: number;
+    scoreT10: number;
+    difference: number;
+    scoreCh: string;
+    countTC: string;
+}
+
+interface Result {
+    [subject: string]: ResultItem;
+}
+export interface RecommendHocPhan {
+    id: number;
+    name: string;
+    scorePredict: number;
+    scoreT10: number | string | null;
+    difference: number;
+    scoreCh: number | string | null;
+    countTC: number | string | null;
+}
+export const recommendLinear = (scores: IScore[]) => {
+    const result: Result = {};
+    const recommendHocPhan: RecommendHocPhan[] = [];
+    for (let i = 0; i < scores.length; i++) {
+        let count = 0;
+        let sum = 0;
+        const nameSubjectY = scores[i].name;
+
+        for (let j = 0; j < scores.length; j++) {
+            const nameSubjectX: string = scores[j].name;
+            if (linearData[nameSubjectY] !== undefined) {
+                if (linearData[nameSubjectY][nameSubjectX] !== undefined) {
+                    if (linearData[nameSubjectY][nameSubjectX].static === 'True') {
+                        const slope = linearData[nameSubjectY][nameSubjectX].slope;
+                        const intercept = linearData[nameSubjectY][nameSubjectX].intercept;
+                        const scoreX: number = parseFloat((scores[j].scoreT10 || '0') as string);
+                        const scoreY = parseFloat(slope) * scoreX + parseFloat(intercept);
+                        count++;
+                        sum = sum + scoreY;
+                    }
+                }
+            }
+        }
+        const meanScoreY = count == 0 ? 0 : sum / count;
+        result[nameSubjectY] = {
+            id: scores[i].id,
+            name: scores[i].name,
+            scorePredict: meanScoreY,
+            scoreT10: scores[i].scoreT10 || 0,
+            difference: meanScoreY - (scores[i].scoreT10 || 0),
+            scoreCh: scores[i].scoreCh || '',
+            countTC: (scores[i].countTC || '') as string,
+        };
+    }
+
+    // convert to array
+    for (const subject in result)
+        recommendHocPhan.push({
+            id: result[subject].id,
+            name: subject,
+            scorePredict: result[subject].scorePredict,
+            scoreT10: result[subject].scoreT10,
+            difference: result[subject].scorePredict - result[subject].scoreT10,
+            scoreCh: result[subject].scoreCh,
+            countTC: result[subject].countTC,
+        });
+
+    recommendHocPhan.sort((a, b) => {
+        return b.difference - a.difference;
+    });
     return recommendHocPhan;
 };

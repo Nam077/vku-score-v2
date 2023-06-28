@@ -9,7 +9,7 @@ import { useNotification } from '../../contexts/Notification.tsx';
 import FloatingButton from '../../components/FloatingButton.tsx';
 import { Button, FloatButton, Modal, Skeleton } from 'antd';
 import TableRecommend from '../../components/TableRecommend.tsx';
-import { recommend } from '../../services/recomend.service.ts';
+import { recommend, recommendLinear } from '../../services/recomend.service.ts';
 import { PlusOutlined } from '@ant-design/icons';
 import AddScore from '../../components/AddScore.tsx';
 import Tutorial from '../../components/Tutorial.tsx';
@@ -216,6 +216,7 @@ const Score: FunctionComponent = () => {
                                     recommends={recommend(scoreData)}
                                     scoreModified={scoreModified}
                                     changeModified={updateScoreModified}
+                                    recommendHocPhan={recommendLinear(scoreData)}
                                 />
                             </Modal>
                             <Modal
