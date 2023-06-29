@@ -3,8 +3,19 @@ import { colorType, getAllHighScoreThanCurrent } from './TableScore.tsx';
 import { Col, Select, Skeleton, Table, Tabs, Tag, Typography } from 'antd';
 import { IScore } from '../pages/score/Score.tsx';
 import { ColumnsType } from 'antd/es/table';
-import { RecommendHocPhan } from '../services/recomend.service.ts';
-
+import { RecommendHocPhan, recommend } from '../services/recomend.service.ts';
+ const validateRecommendHocPhan = (recommendHocPhan: RecommendHocPhan[]): RecommendHocPhan[] => {
+    const result: RecommendHocPhan[] = [];
+    recommendHocPhan.forEach((recommend) => { 
+        if (recommend.scorePredict > 10) {
+            recommend.scoreT10 = 10;
+        }
+        if (recommend.difference > 0) {
+            result.push(recommend);
+        }
+    });
+    return result;
+}
 export interface Recommend {
     id: number;
     value: string;
@@ -41,6 +52,8 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
         ...recommend,
         key: index + 1,
     }));
+    // lọc các difrence > 0 và nếu scorePredict > 10 thì đưa giá trị về 10
+    const filteredRecommendsHocPhan: RecommendHocPhan[] = validateRecommendHocPhan(props.recommendHocPhan);
 
     const columns: ColumnsType<Recommend> = [
         {
@@ -233,7 +246,7 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
                                 children: (
                                     <Table
                                         columns={columns2}
-                                        dataSource={props.recommendHocPhan}
+                                        dataSource={filteredRecommendsHocPhan}
                                         pagination={false}
                                         style={{
                                             fontWeight: 'bold',
