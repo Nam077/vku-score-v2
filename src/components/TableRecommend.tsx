@@ -3,14 +3,16 @@ import { colorType, getAllHighScoreThanCurrent } from './TableScore.tsx';
 import { Col, Select, Skeleton, Table, Tabs, Tag, Typography } from 'antd';
 import { IScore } from '../pages/score/Score.tsx';
 import { ColumnsType } from 'antd/es/table';
-import { RecommendHocPhan, recommend } from '../services/recomend.service.ts';
- const validateRecommendHocPhan = (recommendHocPhan: RecommendHocPhan[]): RecommendHocPhan[] => {
+import { RecommendHocPhan } from '../services/recomend.service.ts';
+ const validateRecommendHocPhan = (recommendHocPhan: RecommendHocPhan[]): RecommendHocPhan[]  => {
     const result: RecommendHocPhan[] = [];
-    recommendHocPhan.forEach((recommend) => { 
+    recommendHocPhan.forEach((recommend, index) => { 
+        
         if (recommend.scorePredict > 10) {
             recommend.scoreT10 = 10;
         }
-        if (recommend.difference > 0) {
+        if ( parseFloat(recommend.difference.toFixed(3)) > 0) {
+            recommend.key = index + 1;
             result.push(recommend);
         }
     });
@@ -223,11 +225,12 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
                     </Typography.Text>
                     <Tabs
                         defaultActiveKey="1"
+                        style={{ fontWeight: 'bold' }}
                         centered
                         items={[
                             {
                                 key: '1',
-                                label: 'Gợi ý học phần theo thế mạnh',
+                                label: 'Gợi ý học phần theo thế mạnh của bạn',
                                 children: (
                                     <Table
                                         columns={columns}
@@ -242,7 +245,7 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
                             },
                             {
                                 key: '2',
-                                label: 'Gợi ý dựa theo mặt bằng chung VKU',
+                                label: 'Gợi ý dựa theo điểm mặt bằng chung của sinh viên VKU',
                                 children: (
                                     <Table
                                         columns={columns2}

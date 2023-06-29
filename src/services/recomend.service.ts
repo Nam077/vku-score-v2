@@ -127,6 +127,7 @@ interface Result {
     [subject: string]: ResultItem;
 }
 export interface RecommendHocPhan {
+    key?: number;
     id: number;
     name: string;
     scorePredict: number;
