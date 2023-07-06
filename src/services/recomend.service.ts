@@ -140,11 +140,13 @@ export const recommendLinear = (scores: IScore[]) => {
     const result: Result = {};
     const recommendHocPhan: RecommendHocPhan[] = [];
     for (let i = 0; i < scores.length; i++) {
+        if (((scores[i].scoreT10 || '') as string) === '') continue;
         let count = 0;
         let sum = 0;
         const nameSubjectY = scores[i].name;
 
         for (let j = 0; j < scores.length; j++) {
+            if (((scores[j].scoreT10 || '') as string) === '') continue;
             const nameSubjectX: string = scores[j].name;
             if (linearData[nameSubjectY] !== undefined) {
                 if (linearData[nameSubjectY][nameSubjectX] !== undefined) {

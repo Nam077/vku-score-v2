@@ -50,6 +50,10 @@ const readJsonFile = async (file: File) => {
     const fileContent = await file.text();
     return JSON.parse(fileContent);
 };
+
+const getScoreFromLocalStorage = (): IScore[] => {
+    return JSON.parse(localStorage.getItem('scoreAll') || '[]');
+};
 const Score: FunctionComponent = () => {
     const { openNotification } = useNotification();
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -177,9 +181,11 @@ const Score: FunctionComponent = () => {
             <CustomDropzone onFilesSelected={onFilesSelected} />
 
             <div style={{ marginTop: '10px' }}>
-                <Button onClick={loadingFromLocalStorage} type={'primary'}>
-                    Load dữ liệu cũ
-                </Button>
+                {getScoreFromLocalStorage().length > 0 && (
+                    <Button onClick={loadingFromLocalStorage} type={'primary'}>
+                        Load dữ liệu cũ
+                    </Button>
+                )}
             </div>
 
             {isLoading ? (

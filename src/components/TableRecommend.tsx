@@ -4,20 +4,19 @@ import { Col, Select, Skeleton, Table, Tabs, Tag, Typography } from 'antd';
 import { IScore } from '../pages/score/Score.tsx';
 import { ColumnsType } from 'antd/es/table';
 import { RecommendHocPhan } from '../services/recomend.service.ts';
- const validateRecommendHocPhan = (recommendHocPhan: RecommendHocPhan[]): RecommendHocPhan[]  => {
+const validateRecommendHocPhan = (recommendHocPhan: RecommendHocPhan[]): RecommendHocPhan[] => {
     const result: RecommendHocPhan[] = [];
-    recommendHocPhan.forEach((recommend, index) => { 
-        
+    recommendHocPhan.forEach((recommend, index) => {
         if (recommend.scorePredict > 10) {
-            recommend.scoreT10 = 10;
+            recommend.scorePredict = 10;
         }
-        if ( parseFloat(recommend.difference.toFixed(3)) > 0) {
+        if (parseFloat(recommend.difference.toFixed(3)) > 0) {
             recommend.key = index + 1;
             result.push(recommend);
         }
     });
     return result;
-}
+};
 export interface Recommend {
     id: number;
     value: string;
@@ -228,23 +227,23 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
                         style={{ fontWeight: 'bold' }}
                         centered
                         items={[
+                            // {
+                            //     key: '1',
+                            //     label: 'Gợi ý học phần theo thế mạnh của bạn',
+                            //     children: (
+                            //         <Table
+                            //             columns={columns}
+                            //             dataSource={filteredRecommendsWithKey}
+                            //             pagination={false}
+                            //             style={{
+                            //                 fontWeight: 'bold',
+                            //                 marginTop: '10px',
+                            //             }}
+                            //         />
+                            //     ),
+                            // },
                             {
                                 key: '1',
-                                label: 'Gợi ý học phần theo thế mạnh của bạn',
-                                children: (
-                                    <Table
-                                        columns={columns}
-                                        dataSource={filteredRecommendsWithKey}
-                                        pagination={false}
-                                        style={{
-                                            fontWeight: 'bold',
-                                            marginTop: '10px',
-                                        }}
-                                    />
-                                ),
-                            },
-                            {
-                                key: '2',
                                 label: 'Gợi ý dựa theo điểm mặt bằng chung của sinh viên VKU',
                                 children: (
                                     <Table
