@@ -56,7 +56,7 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
     // lọc các difrence > 0 và nếu scorePredict > 10 thì đưa giá trị về 10
     const filteredRecommendsHocPhan: RecommendHocPhan[] = validateRecommendHocPhan(props.recommendHocPhan);
 
-    const columns: ColumnsType<Recommend> = [
+    const columns: ColumnsType<RecommendHocPhan> = [
         {
             title: 'STT',
             key: 'stt',
@@ -74,26 +74,69 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
         },
         {
             title: 'Điểm Chữ',
-            key: 'sumScoreCh',
-            dataIndex: 'sumScoreCh',
-            render: (sumScoreCh) => (
+            key: 'scoreCh',
+            dataIndex: 'scoreCh',
+            render: (scoreCh) => (
                 <Col flex={1} style={{ textAlign: 'center' }}>
                     <Tag
-                        color={colorType[sumScoreCh]}
+                        color={colorType[scoreCh]}
                         style={{ marginTop: '5px', textAlign: 'center', fontStyle: 'bold' }}
                     >
-                        {sumScoreCh}
+                        {scoreCh}
                     </Tag>
                 </Col>
             ),
         },
         {
+            title: 'Điểm hiện tại',
+            key: 'scoreT10',
+            dataIndex: 'scoreT10',
+            render: (scoreT10, record) => (
+                <Col flex={1} style={{ textAlign: 'center' }}>
+                    <Tag
+                        color={scoreT10 > record.scorePredict ? colorType['A'] : colorType['F']}
+                        style={{ marginTop: '5px', textAlign: 'center', fontStyle: 'bold' }}
+                    >
+                        {scoreT10}
+                    </Tag>
+                </Col>
+            ),
+        },
+        {
+            title: 'Điểm dự đoán',
+            key: 'scorePredict',
+            dataIndex: 'scorePredict',
+            render: (scorePredict) => (
+                <Col flex={1} style={{ textAlign: 'center' }}>
+                    <Tag
+                        color={scorePredict > 5 ? colorType['A'] : colorType['F']}
+                        style={{ marginTop: '5px', textAlign: 'center', fontStyle: 'bold' }}
+                    >
+                        {scorePredict.toFixed(3)}
+                    </Tag>
+                </Col>
+            ),
+        },
+        // độ chênh lệch
+        // {
+        //     title: 'Độ chênh lệch',
+        //     key: 'difference',
+        //     dataIndex: 'difference',
+        //     render: (difference) => (
+        //         <Col flex={1} style={{ textAlign: 'center' }}>
+        //             <Tag style={{ marginTop: '5px', textAlign: 'center', fontStyle: 'bold' }}>
+        //                 {difference.toFixed(3)}
+        //             </Tag>
+        //         </Col>
+        //     ),
+        // },
+        {
             title: 'Thay đổi',
             key: 'action',
-            dataIndex: 'sumScoreCh',
-            render: (sumScoreCh, record) => {
+            dataIndex: 'scoreCh',
+            render: (scoreCh, record) => {
                 const score = getElementById(record.id, props.scoreModified) as IScore;
-                const isChanged = score?.scoreCh !== sumScoreCh;
+                const isChanged = score?.scoreCh !== scoreCh;
                 return (
                     <div
                         style={{
@@ -107,9 +150,9 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
                         <Select
                             // defaultValue={score?.scoreCh}
                             style={{ fontWeight: 'bold' }}
-                            disabled={sumScoreCh === 'A'}
+                            disabled={scoreCh === 'A'}
                             value={score?.scoreCh}
-                            options={getAllHighScoreThanCurrent(sumScoreCh)}
+                            options={getAllHighScoreThanCurrent(scoreCh)}
                             onChange={(value) => {
                                 const modifiedScore = { ...score, scoreCh: value };
                                 props.changeModified(modifiedScore);
@@ -117,7 +160,7 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
                         />
                         {isChanged && (
                             <Tag color={colorType['A']} style={{ marginTop: '5px', width: '100%' }}>
-                                {sumScoreCh === '' ? 'Chưa có điểm.' : `Điểm trước khi cải thiện ${sumScoreCh}.`}
+                                {scoreCh === '' ? 'Chưa có điểm.' : `Điểm trước khi cải thiện ${scoreCh}.`}
                             </Tag>
                         )}
                     </div>
@@ -222,43 +265,15 @@ const TableRecommend: FunctionComponent<Props> = (props) => {
                         Chúng tôi đã phân tích thế mạnh của bạn. Bạn nên ưu tiên học cải thiện những môn dưới đây, theo
                         thứ tự ưu tiên trừ trên xuống.
                     </Typography.Text>
-                    <Tabs
-                        defaultActiveKey="1"
-                        style={{ fontWeight: 'bold' }}
-                        centered
-                        items={[
-                            // {
-                            //     key: '1',
-                            //     label: 'Gợi ý học phần theo thế mạnh của bạn',
-                            //     children: (
-                            //         <Table
-                            //             columns={columns}
-                            //             dataSource={filteredRecommendsWithKey}
-                            //             pagination={false}
-                            //             style={{
-                            //                 fontWeight: 'bold',
-                            //                 marginTop: '10px',
-                            //             }}
-                            //         />
-                            //     ),
-                            // },
-                            {
-                                key: '1',
-                                label: 'Gợi ý dựa theo điểm mặt bằng chung của sinh viên VKU',
-                                children: (
-                                    <Table
-                                        columns={columns2}
-                                        dataSource={filteredRecommendsHocPhan}
-                                        pagination={false}
-                                        style={{
-                                            fontWeight: 'bold',
-                                            marginTop: '10px',
-                                        }}
-                                    />
-                                ),
-                            },
-                        ]}
-                    ></Tabs>
+                    <Table
+                        columns={columns}
+                        dataSource={filteredRecommendsHocPhan}
+                        pagination={false}
+                        style={{
+                            fontWeight: 'bold',
+                            marginTop: '10px',
+                        }}
+                    />
                 </div>
             )}
         </div>

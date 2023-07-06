@@ -216,7 +216,7 @@ const Score: FunctionComponent = () => {
                                 open={isModalOpen}
                                 onOk={handleOk}
                                 onCancel={handleCancel}
-                                width={800}
+                                width={'77%'}
                             >
                                 <TableRecommend
                                     recommends={recommend(scoreData)}
