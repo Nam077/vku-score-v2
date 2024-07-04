@@ -35,7 +35,7 @@ function App() {
                     background: colorBgContainer,
                 }}
             >
-                <Score></Score>
+                <Score/>
             </Content>
             <Footer>
                 <Typography.Text type="secondary">Copyright © 2022</Typography.Text>

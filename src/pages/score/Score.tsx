@@ -31,14 +31,14 @@ export interface IScore {
 
 const scoreService = new ScoreService();
 const validateData = (scores: IScore[]): IScore[] => {
-    scores = scores.map((score, index) => {
-        score.key = index + 1;
-        score.id = index + 1;
-        score.value = removeAscent(score.name);
-        return score;
-    });
-    return scores;
+    return scores.map((score, index) => ({
+        ...score,
+        key: index + 1,
+        id: index + 1,
+        value: removeAscent(score.name),
+    }));
 };
+
 const generateScoreIdUnique = (scores: IScore[]): number => {
     return Math.max(...scores.map((score) => score.id)) + 1;
 };
@@ -46,6 +46,7 @@ const generateScoreIdUnique = (scores: IScore[]): number => {
 const checkNameExist = (scores: IScore[], name: string): boolean => {
     return scores.some((score) => score.value === name);
 };
+
 const readJsonFile = async (file: File) => {
     const fileContent = await file.text();
     return JSON.parse(fileContent);
@@ -54,87 +55,69 @@ const readJsonFile = async (file: File) => {
 const getScoreFromLocalStorage = (): IScore[] => {
     return JSON.parse(localStorage.getItem('scoreAll') || '[]');
 };
+
 const Score: FunctionComponent = () => {
     const { openNotification } = useNotification();
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [scoreData, setScoreData] = useState<IScore[]>([]);
-    const [scoreModified, setScoreModified] = useState<IScore[]>([]);
+    const [scoreData, setScoreData] = useState<IScore[]>(getScoreFromLocalStorage);
+    const [scoreModified, setScoreModified] = useState<IScore[]>(getScoreFromLocalStorage);
     const [currentGPA, setCurrentGPA] = useState<number>(0);
     const [newGPA, setNewGPA] = useState<number>(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalAdd, setIsModalAdd] = useState(false);
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const showModalAdd = () => {
-        setIsModalAdd(true);
-    };
 
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
+    const showModal = () => setIsModalOpen(true);
+    const showModalAdd = () => setIsModalAdd(true);
+    const handleOk = () => setIsModalOpen(false);
+    const handleOkAdd = () => setIsModalAdd(false);
+    const handleCancel = () => setIsModalOpen(false);
+    const handleCancelAdd = () => setIsModalAdd(false);
 
-    const handleOkAdd = () => {
-        setIsModalAdd(false);
-    };
-
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleCancelAdd = () => {
-        setIsModalAdd(false);
-    };
-    const loadingFromLocalStorage = () => {
-        setScoreData(JSON.parse(localStorage.getItem('scoreAll') || '[]'));
-        setScoreModified(JSON.parse(localStorage.getItem('scoreAll') || '[]'));
-    };
     const saveToLocalStorage = (data: IScore[]) => {
         localStorage.setItem('scoreAll', JSON.stringify(data));
     };
+
     const onFilesSelected = async (files: FileWithPath[]) => {
         const file = files[0];
-        readJsonFile(file).then((res) => {
-            if (!res.scoreAll) {
-                openNotification('File tải lên không đúng!', 'error');
-                return;
-            }
-            setIsLoading(true);
-            res.scoreAll.forEach((item: any) => {
-                item.key = item.id;
-                item.value = removeAscent(item.name);
-            });
-
-            const scoreUpload = validateData(res.scoreAll);
-            setScoreData(scoreUpload);
-            setScoreModified(scoreUpload);
-            scoreService.setScore(scoreUpload);
-            setCurrentGPA(scoreService.calcGPA());
-            setNewGPA(scoreService.calcGPA());
-            openNotification('Load dữ liệu thành công !', 'success');
-            saveToLocalStorage(scoreUpload);
-            const time = setTimeout(() => {
-                setIsLoading(false);
-                clearTimeout(time);
-            }, 1000);
-        });
+        const res = await readJsonFile(file);
+        if (!res.scoreAll) {
+            openNotification('File tải lên không đúng!', 'error');
+            return;
+        }
+        setIsLoading(true);
+        const scoreUpload = validateData(res.scoreAll);
+        setScoreData(scoreUpload);
+        setScoreModified(scoreUpload);
+        scoreService.setScore(scoreUpload);
+        const gpa = scoreService.calcGPA();
+        setCurrentGPA(gpa);
+        setNewGPA(gpa);
+        openNotification('Load dữ liệu thành công !', 'success');
+        saveToLocalStorage(scoreUpload);
+        setTimeout(() => setIsLoading(false), 1000);
     };
+
     useEffect(() => {
         scoreService.setScore(scoreModified);
-        setNewGPA(scoreService.calcGPA());
+        const gpa = scoreService.calcGPA();
+        setNewGPA(gpa);
+        if (scoreData.length > 0) {
+            openNotification(`GPA đã thay đổi thành ${gpa.toFixed(2)}`, 'success');
+        }
     }, [scoreModified]);
 
     useEffect(() => {
-        if (scoreData.length > 0) {
-            openNotification('GPA đã thay đổi thành ' + newGPA.toFixed(2), 'success');
-        }
-    }, [newGPA]);
+        scoreService.setScore(scoreData);
+        const gpa = scoreService.calcGPA();
+        setCurrentGPA(gpa);
+        setNewGPA(gpa);
+    }, [scoreData]);
 
     useEffect(() => {
-        scoreService.setScore(scoreData);
-        setCurrentGPA(scoreService.calcGPA());
-        setNewGPA(scoreService.calcGPA());
-    }, [scoreData]);
+        const gpa = scoreService.calcGPA();
+        setCurrentGPA(gpa);
+        setNewGPA(gpa);
+    }, [scoreData, scoreModified]);
 
     const addScore = (score: IScore) => {
         if (checkNameExist(scoreData, score.value)) {
@@ -142,38 +125,26 @@ const Score: FunctionComponent = () => {
             return;
         }
         score.id = generateScoreIdUnique(scoreData);
-        setScoreData([...scoreData, score]);
-        setScoreModified([...scoreModified, score]);
-        openNotification('Thêm thành công!', 'success');
-        saveToLocalStorage(scoreData);
-    };
-
-    const removeScore = (score: IScore) => {
-        const index = scoreData.findIndex((s) => s.id === score.id);
-        if (index === -1) {
-            return;
-        }
-        setScoreData([...scoreData.slice(0, index), ...scoreData.slice(index + 1)]);
+        const updatedScores = [...scoreData, score];
+        setScoreData(updatedScores);
+        setScoreModified(updatedScores);
+        openNotification('Thêm thành công!', 'success');
+        saveToLocalStorage(updatedScores);
     };
 
     const deleteScore = (id: number) => {
-        const index = scoreData.findIndex((s) => s.id === id);
-        if (index === -1) {
-            return;
-        }
-        setScoreData([...scoreData.slice(0, index), ...scoreData.slice(index + 1)]);
-        setScoreModified([...scoreModified.slice(0, index), ...scoreModified.slice(index + 1)]);
+        const updatedScores = scoreData.filter((s) => s.id !== id);
+        const updatedModifiedScores = scoreModified.filter((s) => s.id !== id);
+        setScoreData(updatedScores);
+        setScoreModified(updatedModifiedScores);
+        openNotification('Xóa học phần thành công!', 'success');
+        saveToLocalStorage(updatedScores);
     };
 
     const updateScoreModified = (score: IScore) => {
-        setScoreModified(
-            scoreModified.map((s) => {
-                if (s.id === score.id) {
-                    return { ...s, ...score };
-                }
-                return s;
-            }),
-        );
+        const updatedScores = scoreModified.map((s) => (s.id === score.id ? { ...s, ...score } : s));
+        setScoreModified(updatedScores);
+        saveToLocalStorage(scoreData);
     };
 
     return (
@@ -181,67 +152,65 @@ const Score: FunctionComponent = () => {
             <CustomDropzone onFilesSelected={onFilesSelected} />
 
             <div style={{ marginTop: '10px' }}>
-                {getScoreFromLocalStorage().length > 0 && (
-                    <Button onClick={loadingFromLocalStorage} type={'primary'}>
+                {scoreData.length > 0 && (
+                    <Button onClick={() => {
+                        const scoresFromLocalStorage = getScoreFromLocalStorage();
+                        setScoreData(scoresFromLocalStorage);
+                        setScoreModified(scoresFromLocalStorage);
+                    }} type="primary">
                         Load dữ liệu cũ
                     </Button>
                 )}
             </div>
 
             {isLoading ? (
-                <>
-                    <Skeleton />
-                </>
+                <Skeleton />
+            ) : scoreData.length > 0 ? (
+                <div style={{ marginTop: '20px' }}>
+                    <GPAView GPA={currentGPA} GPAChange={newGPA} />
+                    <TableScore
+                        deleteScore={deleteScore}
+                        scores={scoreData}
+                        changeModified={updateScoreModified}
+                        scoreModified={scoreModified}
+                    />
+                    <FloatingButton onClick={showModal}>Gợi ý cải thiện học phần</FloatingButton>
+                    <FloatButton
+                        icon={<PlusOutlined />}
+                        onClick={showModalAdd}
+                        type="primary"
+                        tooltip="Thêm học phần"
+                        style={{ bottom: 30, left: 30 }}
+                    />
+                    <Modal
+                        title="Gợi ý cải thiện học phần"
+                        open={isModalOpen}
+                        onOk={handleOk}
+                        onCancel={handleCancel}
+                        width="77%"
+                    >
+                        <TableRecommend
+                            recommends={recommend(scoreData)}
+                            scoreModified={scoreModified}
+                            changeModified={updateScoreModified}
+                            recommendHocPhan={recommendLinear(scoreData)}
+                        />
+                    </Modal>
+                    <Modal
+                        title="Thêm học phần"
+                        open={isModalAdd}
+                        onOk={handleOkAdd}
+                        okButtonProps={{ disabled: true }}
+                        onCancel={handleCancelAdd}
+                        width={800}
+                    >
+                        <AddScore addScore={addScore} />
+                    </Modal>
+                </div>
             ) : (
-                <>
-                    {scoreData.length > 0 ? (
-                        <div style={{ marginTop: '20px' }}>
-                            <GPAView GPA={currentGPA} GPAChange={newGPA} />
-                            <TableScore
-                                deleteScore={deleteScore}
-                                scores={scoreData}
-                                changeModified={updateScoreModified}
-                                scoreModified={scoreModified}
-                            />
-                            <FloatingButton onClick={showModal}>Gợi ý cải thiện học phần</FloatingButton>
-                            <FloatButton
-                                icon={<PlusOutlined />}
-                                onClick={showModalAdd}
-                                type={'primary'}
-                                tooltip={'Thêm học phần'}
-                                style={{ bottom: 30, left: 30 }}
-                            ></FloatButton>
-                            <Modal
-                                title="Gợi ý cải thiện học phần"
-                                open={isModalOpen}
-                                onOk={handleOk}
-                                onCancel={handleCancel}
-                                width={'77%'}
-                            >
-                                <TableRecommend
-                                    recommends={recommend(scoreData)}
-                                    scoreModified={scoreModified}
-                                    changeModified={updateScoreModified}
-                                    recommendHocPhan={recommendLinear(scoreData)}
-                                />
-                            </Modal>
-                            <Modal
-                                title={'Thêm học phần'}
-                                open={isModalAdd}
-                                onOk={handleOkAdd}
-                                okButtonProps={{ disabled: true }}
-                                onCancel={handleCancelAdd}
-                                width={800}
-                            >
-                                <AddScore addScore={addScore} />
-                            </Modal>
-                        </div>
-                    ) : (
-                        <div style={{ marginTop: '40px' }}>
-                            <Tutorial />
-                        </div>
-                    )}
-                </>
+                <div style={{ marginTop: '40px' }}>
+                    <Tutorial />
+                </div>
             )}
         </div>
     );
