@@ -113,12 +113,6 @@ const Score: FunctionComponent = () => {
         setNewGPA(gpa);
     }, [scoreData]);
 
-    useEffect(() => {
-        const gpa = scoreService.calcGPA();
-        setCurrentGPA(gpa);
-        setNewGPA(gpa);
-    }, [scoreData, scoreModified]);
-
     const addScore = (score: IScore) => {
         if (checkNameExist(scoreData, score.value)) {
             openNotification('Học phần đã tồn tại!', 'error');
